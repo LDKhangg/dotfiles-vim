@@ -18,6 +18,24 @@ The repo keeps real file paths so restoring to a new machine is simple.
 - IntelliJ IDEA handles Java-heavy navigation, refactors, diagnostics, and completion.
 - IdeaVim bridges IDE actions back into a Vim-style workflow.
 
+## Requirements
+
+- Linux environment
+- Neovim `0.11+` with this repo currently tested on `0.12.3`
+- Git, curl, and unzip
+- `ripgrep`, `fd`, and `fzf` for the search workflow
+- Node.js, npm, Python, and `pynvim` for the current plugin/tooling stack
+- Clipboard support through `wl-clipboard` or `xclip`
+- IntelliJ IDEA with the IdeaVim plugin for the Java side of the setup
+
+## Recommended apps
+
+- `kitty` for a clean terminal UI that matches the screenshots in this repo
+- `tmux` to pair with `vim-tmux-navigator`
+- JetBrains Toolbox for installing and updating IntelliJ IDEA
+- A JDK 21+ distribution if you want Java support in IntelliJ
+- `lazygit` if you want a lightweight terminal Git companion next to Neovim
+
 ## Included configs
 
 - `.config/nvim`
@@ -39,10 +57,12 @@ The repo keeps real file paths so restoring to a new machine is simple.
 ├── .ideavimrc
 ├── assets/
 │   └── screenshots/
+├── Makefile
 ├── scripts/
 │   ├── bootstrap.sh
 │   ├── install.sh
-│   └── sync-from-home.sh
+│   ├── sync-from-home.sh
+│   └── update-plugins.sh
 └── README.md
 ```
 
@@ -54,16 +74,52 @@ Install base packages, then copy the tracked config files into the matching path
 ./scripts/bootstrap.sh
 ```
 
+Or with `make`:
+
+```bash
+make bootstrap
+```
+
+Show the available maintenance commands:
+
+```bash
+make
+```
+
 Install repo contents back into the same paths under `$HOME`:
 
 ```bash
 ./scripts/install.sh
 ```
 
+Or with `make`:
+
+```bash
+make install
+```
+
 Sync the latest local config from your machine back into the repo:
 
 ```bash
 ./scripts/sync-from-home.sh
+```
+
+Or with `make`:
+
+```bash
+make sync
+```
+
+Refresh Neovim plugins in an isolated temp environment, then write the new lockfile back into the repo:
+
+```bash
+./scripts/update-plugins.sh
+```
+
+Or with `make`:
+
+```bash
+make update-plugins
 ```
 
 ## Screenshots
@@ -144,6 +200,7 @@ Current Neovim plugins tracked in `lazy-lock.json`:
 - Neovim is kept generic; the repo no longer carries custom Java `jdtls` project wiring.
 - IntelliJ completion popup and parameter info are enabled to preserve stronger IDE-native behavior.
 - `scripts/bootstrap.sh` installs the basic CLI/editor dependencies but does not install IntelliJ IDEA itself.
+- `scripts/update-plugins.sh` updates `lazy-lock.json` from a temporary XDG workspace so the repo lockfile can be refreshed without mutating your main Neovim data directory.
 
 ## Restore manually
 
