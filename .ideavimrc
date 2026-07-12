@@ -1,0 +1,83 @@
+" ---- IdeaVim config ----
+" Mirrors ~/.config/nvim keymap.lua / options.lua where it makes sense.
+" Anything that would shadow a useful IntelliJ default shortcut is either
+" skipped or moved to a <leader> chord instead - see notes inline.
+
+let mapleader = " "
+
+" ---- options (mirrors nvim options.lua) ----
+set relativenumber
+set number
+set ignorecase
+set smartcase
+set clipboard+=unnamedplus
+
+" ---- IDE integration niceties (no shortcut conflicts) ----
+set ideajoin                " J uses IDE's smart join instead of plain vim join
+set idearefactormode=keep   " stay in insert mode during inline rename, etc.
+
+" ---- insert mode ----
+imap jk <Esc>
+
+" ---- search ----
+nmap <leader>nh :nohlsearch<CR>
+
+" ---- increment/decrement (native vim, no IDE action involved) ----
+nmap <leader>+ <C-a>
+nmap <leader>- <C-x>
+
+" ---- window splits (native vim window commands; IdeaVim maps these to
+" real IDE editor splits already, so no <Action> needed) ----
+nmap <leader>sv <C-w>v
+nmap <leader>sh <C-w>s
+nmap <leader>se <C-w>=
+nmap <leader>sx <C-w>c
+
+" ---- window navigation ----
+" NOT bound on bare <C-h/j/k/l> on purpose: IntelliJ's default keymap uses
+" <C-h> for Type Hierarchy and <C-j> for Insert Live Template. Using
+" <leader>w... instead so those IDE shortcuts keep working.
+nmap <leader>wh <C-w>h
+nmap <leader>wj <C-w>j
+nmap <leader>wk <C-w>k
+nmap <leader>wl <C-w>l
+
+" ---- file / project navigation -> IDE actions (no vim equivalent exists) ----
+nmap <leader>e  <Action>(ActivateProjectToolWindow)
+nmap <leader>ff <Action>(GotoFile)
+nmap <leader>sf <Action>(GotoFile)
+nmap <leader>fg <Action>(FindInPath)
+nmap <leader>sg <Action>(SearchEverywhere)
+nmap <leader>ss <Action>(GotoSymbol)
+nmap <leader>fm <Action>(ReformatCode)
+
+" ---- semantic navigation / refactor / diagnostics -> IDE actions ----
+nmap gd         <Action>(GotoDeclaration)
+nmap gD         <Action>(GotoTypeDeclaration)
+nmap gi         <Action>(GotoImplementation)
+nmap gr         <Action>(FindUsages)
+nmap gt         <Action>(TypeHierarchy)
+nmap K          <Action>(QuickJavaDoc)
+nmap <leader>rn <Action>(RenameElement)
+nmap <leader>ca <Action>(ShowIntentionActions)
+nmap <leader>d  <Action>(ShowErrorDescription)
+nmap [d         <Action>(GotoPreviousError)
+nmap ]d         <Action>(GotoNextError)
+nmap <leader>oi <Action>(OptimizeImports)
+nmap <leader>f  <Action>(ReformatCode)
+
+" ---- tab/buffer cycling (nvim's BufferLine <-> IDE editor tabs) ----
+nmap <Tab>      <Action>(NextTab)
+nmap <S-Tab>    <Action>(PreviousTab)
+nmap <leader>tn <Action>(NextTab)
+nmap <leader>tp <Action>(PreviousTab)
+
+nmap <leader>x <Action>(CloseContent)
+nmap <leader>w :w<CR>
+" nvim's <leader>q runs :q (close current split, or quit if it's the last
+" one). Mapped to :close here too so it can never quit the whole IDE.
+nmap <leader>q :close<CR>
+
+" ---- keep IDE copy behavior on Ctrl-C while still letting vim use it to
+" cancel in insert mode (official IdeaVim-recommended handler) ----
+sethandler <C-C> n-v:ide i:vim
